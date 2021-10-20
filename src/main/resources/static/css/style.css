@@ -1,0 +1,204 @@
+/**
+* Template Name: Maundy - v4.5.0
+* Template URL: https://bootstrapmade.com/maundy-free-coming-soon-bootstrap-theme/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+/* Particles start */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.background {
+  background-color: #97B1AB;
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+/* Particles end */
+
+body {
+  font-family: 'Righteous', cursive;
+  color: #fff;
+  background-size: cover;
+  position: relative;
+}
+@media (min-width: 1024px) {
+  body {
+    background-attachment: fixed;
+  }
+}
+
+.customBtn {
+  background-color: #24b7a4;
+  color: #fff;
+}
+
+a {
+  color: #24b7a4;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #36d8c3;
+  text-decoration: none;
+}
+
+#main {
+  position: relative;
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+#header {
+  position: relative;
+  width: 100%;
+  padding: 100px 0;
+  /* countdown */
+}
+#header h1 {
+  margin: 0 0 10px 0;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+  color: #fff;
+}
+#header h2 {
+  color: #eee;
+  margin-bottom: 40px;
+  font-size: 22px;
+}
+#header .subscribe {
+  font-size: 15px;
+  text-align: center;
+}
+
+#header .social-links {
+  margin-top: 40px;
+}
+#header .social-links a {
+  font-size: 16px;
+  color: #fff;
+  margin: 0 3px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#header .social-links a i {
+  line-height: 0;
+}
+#header .social-links a:hover {
+  background: #24b7a4;
+  border-color: #24b7a4;
+}
+
+.url {
+  margin: 1em;
+}
+
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+  padding: 60px 0;
+  overflow: hidden;
+}
+
+.section-bg {
+  background-color: #d8f7f3;
+}
+
+.section-title {
+  text-align: center;
+  padding-bottom: 30px;
+}
+.section-title h2 {
+  font-size: 32px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.section-title h2::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 50px;
+  height: 2px;
+  background: #24b7a4;
+  bottom: 0;
+  left: calc(50% - 25px);
+}
+.section-title p {
+  margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
+# About Us
+--------------------------------------------------------------*/
+.about .icon-box {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.about .icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.about .icon i {
+  color: #fff;
+  font-size: 42px;
+  line-height: 0;
+}
+.about .title {
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+.about .title a {
+  color: #fff;
+  transition: 0.3s;
+}
+.about .description {
+  line-height: 24px;
+  font-size: 14px;
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+#footer {
+  background: rgba(38, 55, 69, 0.4);
+  padding: 30px 0;
+  color: #fff;
+  font-size: 14px;
+  position: relative;
+}
+#footer .copyright {
+  text-align: center;
+}
+#footer .credits {
+  padding-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  color: #fff;
+}
+#footer .credits a {
+  color: #36d8c3;
+}
