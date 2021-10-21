@@ -29,8 +29,8 @@ body {
   font-family: 'Righteous', cursive;
   color: #fff;
   background-size: cover;
-  position: relative;
 }
+
 @media (min-width: 1024px) {
   body {
     background-attachment: fixed;
@@ -114,7 +114,6 @@ a:hover {
 # Sections General
 --------------------------------------------------------------*/
 section {
-  padding: 60px 0;
   overflow: hidden;
 }
 

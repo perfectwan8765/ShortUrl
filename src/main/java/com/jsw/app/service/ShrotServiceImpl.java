@@ -28,19 +28,46 @@ public class ShrotServiceImpl implements ShortService {
     @Autowired
     private Base10Util encodeUtil;
     
+    /**      
+     *  User가 원하는 Url를 저장 -> Id encoding한 후 저장
+     *  @author jsw
+     *  @param url User가 Short하길 원하는 Url
+     *  @return String Id를 Encoding한 값
+     */
     @Transactional
     public String encodeUrl (String url) {
-        Integer lastId = urlRepo.getNextUrlId();
-        lastId = lastId == null ? 1 : lastId + 1;
+        Url urlByUrl = urlRepo.findByUrl(url);
         
-        String encodeId = encodeUtil.fromBase10(lastId);
+        if (urlByUrl == null) {
+            Integer lastId = urlRepo.getNextUrlId();
+            lastId = lastId == null ? 1 : lastId + 1;
+            
+            String encodeId = encodeUtil.fromBase10(lastId);
+            
+            log.info("Insert Id: {}, Url:{}, encodeId:{}", lastId, url, encodeId);
+            Url urlEntity = new Url(url, encodeId, new Date());
+            
+            em.persist(urlEntity);
+            
+            return encodeId;
+        }
+
+        log.info("Already Exists, Id: {}, Url:{}, encodeId:{}", urlByUrl.getId(), urlByUrl.getUrl(), urlByUrl.getEncodeId());
         
-        log.info("Id: {}, Url:{}, encodeId:{}", lastId, url, encodeId);
-        Url urlEntity = new Url(url, encodeId, new Date());
+        return urlByUrl.getEncodeId();
+    }
+    
+    public String getUrl (String id) {
+        Url url = urlRepo.findByEncodeId(id);
         
-        em.persist(urlEntity);
+        if (url == null) {
+            log.error("No Have Id");
+            return null;
+        }
+
+        log.info("Exists Url, Id:{}, Url:{}, encodeId:{}", url.getId(), url.getUrl(), url.getEncodeId());
         
-        return encodeId;
+        return url.getUrl();
     }
 
 }

@@ -2,5 +2,7 @@ package com.jsw.app.service;
 
 public interface ShortService {
     
-    public String encodeUrl (String url);
+    String encodeUrl (String url);
+    
+    String getUrl (String id);
 }

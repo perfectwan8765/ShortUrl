@@ -11,9 +11,13 @@ $(function(){
      * Send Short Url user want
      */
     $(".url button.customBtn").click(function() {
+        const urlElement = $(".url input[name=url]");
         const url = $(".url input[name=url]").val();
         
         if (!url) {
+            $("#urlInvaildAlert").text('Please Input Url you want to short url.');
+            $("#urlInvaildAlert").addClass('show').css('z-index', 1).fadeOut('slow');
+            urlElement.val("http://");
             return;
         }
         
@@ -25,7 +29,7 @@ $(function(){
             },
             success: function(result) {
                 // url input value init
-                $(".url input[name=url]").val("http://");
+                urlElement.val("http://");
                 
 //                const encodeUrl = $(location).attr('href') + result;
 //                var alert = $('div').addClass('alert alert-success').prop('role', 'alert').text('test');

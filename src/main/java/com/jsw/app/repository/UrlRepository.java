@@ -8,5 +8,9 @@ import com.jsw.app.entity.Url;
 public interface UrlRepository extends JpaRepository<Url, Integer> {
     
     @Query(value = "SELECT id FROM Url ORDER BY id DESC LIMIT 1", nativeQuery = true)
-    public Integer getNextUrlId();
+    Integer getNextUrlId();
+    
+    Url findByUrl(String url);
+    
+    Url findByEncodeId(String encodeId);
 }
