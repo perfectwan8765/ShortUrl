@@ -117,6 +117,16 @@ a:hover {
   margin: 0 1em 0 2em;
 }
 
+/* URL List Width Fix */
+#alertDiv ul.list-group {
+  width: 60em;
+}
+
+#alertDiv li {
+  display: flex;
+  justify-content: space-between;
+}
+
 /*--------------------------------------------------------------
 # Sections General
 --------------------------------------------------------------*/
