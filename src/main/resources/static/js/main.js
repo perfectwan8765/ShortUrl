@@ -31,6 +31,16 @@ $(function(){
         maxParticles: 220,
         connectParticles: true
     });
+
+    /**
+     * Send Short Url user want
+     */
+    $("#sidebarToggle").click(function(event){
+        console.log('abc')
+        event.preventDefault();
+        document.body.classList.toggle('sb-sidenav-toggled');
+        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+    });
     
     /**
      * Send Short Url user want
