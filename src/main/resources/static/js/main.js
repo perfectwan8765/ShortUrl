@@ -33,10 +33,61 @@ $(function(){
     });
 
     /**
+     * Login Button Click Event
+     */
+     $("#loginBtn").click(function(event){
+        event.preventDefault();
+        const email = $('#sidebar-wrapper input[name="email"]').val();
+        const password = $('#sidebar-wrapper input[name="password"]').val();
+
+        $.ajax({
+            type: "POST",
+            url: href + 'member/login',
+            data: {
+                "email" : email,
+                "password" : password,
+            },
+            success: function(xhr, textStatus, errorThrown) {
+                console.log(xhr);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            error: function(result) {
+                console.log(result.responseJSON);
+            }
+        });
+    });
+
+    /**
+     * Add Member Button Click Event
+     */
+     $("#registerBtn").click(function(event){
+        event.preventDefault();
+        const email = $('#sidebar-wrapper input[name="email"]').val();
+        const password = $('#sidebar-wrapper input[name="password"]').val();
+
+        $.ajax({
+            type: "POST",
+            url: href + 'member/new',
+            data: {
+                "email" : email,
+                "password" : password,
+            },
+            success: function(xhr, textStatus, errorThrown) {
+                console.log(xhr);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            error: function(result) {
+                console.log(result.reponseJson);
+            }
+        });
+    });
+
+    /**
      * Send Short Url user want
      */
     $("#sidebarToggle").click(function(event){
-        console.log('abc')
         event.preventDefault();
         document.body.classList.toggle('sb-sidenav-toggled');
         localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));

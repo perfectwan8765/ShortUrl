@@ -60,14 +60,11 @@ h2 {
 }
 
 #sidebar-wrapper {
+  width: 20%;
   min-height: 100vh;
-  margin-left: -8rem;
-  transition: margin 0.25s ease-out;
   color: black;
-}
-
-body.sb-sidenav-toggled #sidebar-wrapper {
-  margin-left: 0;
+  background-color: #ffffff;
+  opacity: 0.5;
 }
 
 /*--------------------------------------------------------------
