@@ -1,8 +1,8 @@
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
+  #mvc:
+  #  view:
+  #    prefix: /WEB-INF/jsp/
+  #    suffix: .jsp
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/shorturl
@@ -15,3 +15,7 @@ spring:
         format_sql: true
         #hbm2ddl.auto: create-only # only create when no table
     show-sql: true
+  thymeleaf:
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html

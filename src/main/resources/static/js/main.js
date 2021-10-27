@@ -51,9 +51,12 @@ $(function(){
                 console.log(xhr);
                 console.log(textStatus);
                 console.log(errorThrown);
+                location.reload();
             },
             error: function(result) {
-                console.log(result.responseJSON);
+                const loginAlertElement = $(`<div class='alert alert-danger text-center' role='alert'>${result.responseJSON['message']}</div>`);
+                $("#loginAlertDiv").prepend(loginAlertElement);
+                loginAlertElement.fadeOut(4000, 'linear');
             }
         });
     });
@@ -77,6 +80,25 @@ $(function(){
                 console.log(xhr);
                 console.log(textStatus);
                 console.log(errorThrown);
+
+            },
+            error: function(result) {
+                console.log(result.reponseJson);
+            }
+        });
+    });
+
+    /**
+     * Add Member Button Click Event
+     */
+     $("#logoutBtn").click(function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: href + 'member/logout',
+            success: function(xhr, textStatus, errorThrown) {
+                location.reload();
             },
             error: function(result) {
                 console.log(result.reponseJson);
