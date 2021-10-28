@@ -15,16 +15,19 @@ $(function(){
     };
 
     /**
-     * Alert Warning for request short URL
-     * @param {string} text 경고메시지
+     * Add Div for Alert
+     * @param {string}  divName   div for alert show 
+     * @param {string}  msgText   message text
+     * @param {boolean} isWarning true -> warning, false -> danger
      */
-    const addWarningAlert = function (warningText) {
-        const urlAlertElement = $(`<div class='alert alert-warning text-center' role='alert'>${warningText}</div>`);
-        $("#alertDiv").prepend(urlAlertElement);
-        urlAlertElement.fadeOut(fadeOutTime, 'linear');
+    const showAlert = function (divName, msgText, isWarning) {
+        const alertElement = $(`<div class='alert alert-${isWarning ? 'warning' : 'danger'} text-center' role='alert'>${msgText}</div>`);
+        $(`#${divName}`).prepend(alertElement);
+        alertElement.fadeOut(fadeOutTime, 'linear');
     };
+    
 
-    /* Particles.js setting(background image) */
+    /* Particles.js setting (background image) */
     Particles.init({
         selector: '.background',
         color: '#955B98',
@@ -37,27 +40,27 @@ $(function(){
      */
      $("#loginBtn").click(function(event){
         event.preventDefault();
-        const email = $('#sidebar-wrapper input[name="email"]').val();
-        const password = $('#sidebar-wrapper input[name="password"]').val();
+        const emailElement = $('#sidebar-wrapper input[name="email"]');
+        const passwordElement = $('#sidebar-wrapper input[name="password"]');
 
         $.ajax({
             type: "POST",
             url: href + 'member/login',
             data: {
-                "email" : email,
-                "password" : password,
+                "email" : emailElement.val(),
+                "password" : passwordElement.val(),
             },
             success: function(xhr, textStatus, errorThrown) {
-                console.log(xhr);
-                console.log(textStatus);
-                console.log(errorThrown);
+                // Welcome div로 변경
                 location.reload();
             },
             error: function(result) {
-                const loginAlertElement = $(`<div class='alert alert-danger text-center' role='alert'>${result.responseJSON['message']}</div>`);
-                $("#loginAlertDiv").prepend(loginAlertElement);
-                loginAlertElement.fadeOut(4000, 'linear');
+                showAlert('loginAlertDiv', result.responseJSON['message'], false);
             }
+        }).always(function(){ // success, error
+            // Login input (Email, Password) init
+            emailElement.val('');
+            passwordElement.val('');
         });
     });
 
@@ -66,25 +69,26 @@ $(function(){
      */
      $("#registerBtn").click(function(event){
         event.preventDefault();
-        const email = $('#sidebar-wrapper input[name="email"]').val();
-        const password = $('#sidebar-wrapper input[name="password"]').val();
+        const emailElement = $('#sidebar-wrapper input[name="email"]');
+        const passwordElement = $('#sidebar-wrapper input[name="password"]');
 
         $.ajax({
             type: "POST",
             url: href + 'member/new',
             data: {
-                "email" : email,
-                "password" : password,
+                "email" : emailElement.val(),
+                "password" : passwordElement.val(),
             },
             success: function(xhr, textStatus, errorThrown) {
-                console.log(xhr);
-                console.log(textStatus);
-                console.log(errorThrown);
-
+                showAlert('loginAlertDiv', `Register Succcess!!! ${xhr}`, true);
             },
-            error: function(result) {
-                console.log(result.reponseJson);
+            error: function(xhr, textStatus, errorThrown) {
+                showAlert('loginAlertDiv', xhr['responseText'], false);
             }
+        }).always(function(){ // success, error
+            // Login input (Email, Password) init
+            emailElement.val('');
+            passwordElement.val('');
         });
     });
 
@@ -125,14 +129,14 @@ $(function(){
         
         // urlElement Validate Action
         if (!url) {
-            addWarningAlert('Please Input Url you want to Short URL.');
+            showAlert('alertDiv', 'Please Input Url you want to Short URL.', true);
             urlElement.val("http://");
             return;
         }
 
         // Already Display Short URL
         if (ulElement.children([`data-url=${url}`]).length > 0) {
-            addWarningAlert('Already you find this URL.');
+            showAlert('alertDiv', 'Already you find this URL.', true);
             urlElement.val("http://");
             return;
         }
@@ -168,9 +172,7 @@ $(function(){
                 ulElement.prepend(liElement);
             },
             error: function(xhr, textStatus, errorThrown) {
-                const errElement = $(`<div class="alert alert-danger text-center" role="alert">${xhr.responseText}</div>`);
-                $("#alertDiv").prepend(errElement);
-                errElement.fadeOut(fadeOutTime, 'linear');
+                showAlert('alertDiv', xhr['responseText'], false);
             }
         }).always(function(){ // success, error
             // URL input value init

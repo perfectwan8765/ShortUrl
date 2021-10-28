@@ -5,7 +5,7 @@ spring:
   #    suffix: .jsp
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/shorturl
+    url: jdbc:postgresql://localhost:5432/shorturl?currentSchema=shorturl
     username: shorturl
     password: shorturl
   jpa:

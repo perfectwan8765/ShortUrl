@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.jsw.app.entity.Member;
+import com.jsw.app.exception.UserAlreadyExistException;
 import com.jsw.app.service.MemberService;
 import com.jsw.app.service.ShortService;
 
@@ -30,13 +31,13 @@ public class HomeController {
         String url = shortService.getUrl(id);
 
         if (url == null) {
-            return new ResponseEntity<>("No Have Url", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Have Url");
         }
         
         URI redirectUri = new URI(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(redirectUri);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+        return ResponseEntity.status(HttpStatus.SEE_OTHER).headers(httpHeaders).build();
     }
 
     @PostMapping("/member/login")
@@ -45,9 +46,13 @@ public class HomeController {
     }
 
     @PostMapping("/member/new")
-    public String addMember(Member member) {
-        memberService.save(member);
-        return "/";
+    public ResponseEntity<Object> addMember(Member member) {
+        try {
+            memberService.save(member);
+        } catch (UserAlreadyExistException | IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        
+        return ResponseEntity.ok(member.getEmail());
     }
-
 }
