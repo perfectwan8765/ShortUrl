@@ -8,9 +8,12 @@ import javax.persistence.PersistenceContext;
 import com.jsw.app.entity.Url;
 import com.jsw.app.repository.UrlRepository;
 import com.jsw.app.util.Base10Util;
+import com.jsw.app.util.facade.MemberAuthenticationFacade;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,9 @@ public class ShrotServiceImpl implements ShortService {
 
     @Autowired
     private UrlValidator urlValidator;
+
+    @Autowired
+    private MemberAuthenticationFacade authenticationFacade;
     
     /**      
      *  User가 원하는 Url를 저장 -> Id encoding한 후 저장
@@ -45,6 +51,12 @@ public class ShrotServiceImpl implements ShortService {
         if (!urlValidator.isValid(url)) {
             log.error("Input Invalid URL");
             throw new IllegalArgumentException("Invalid URL");
+        }
+
+        // Member Login Check
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            log.info("Member Login : {}", authentication.getName());
         }
 
         Url urlByUrl = urlRepo.findByUrl(url);
