@@ -1,6 +1,7 @@
 package com.jsw.app.service;
 
 import java.util.Date;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -62,12 +63,11 @@ public class ShrotServiceImpl implements ShortService {
         Url urlByUrl = urlRepo.findByUrl(url);
         
         if (urlByUrl == null) {
-            Integer lastId = urlRepo.getNextUrlId();
-            lastId = lastId == null ? 1 : lastId + 1;
+            int newId = Optional.ofNullable(urlRepo.getNextUrlId()).orElseGet(() -> 0) + 1;
             
-            String encodeId = encodeUtil.fromBase10(lastId);
+            String encodeId = encodeUtil.fromBase10(newId);
             
-            log.info("Insert Id: {}, Url:{}, encodeId:{}", lastId, url, encodeId);
+            log.info("Insert Id: {}, Url:{}, encodeId:{}", newId, url, encodeId);
             Url urlEntity = new Url(url, encodeId, new Date());
             
             em.persist(urlEntity);

@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import com.jsw.app.entity.Member;
 import com.jsw.app.exception.UserAlreadyExistException;
 import com.jsw.app.repository.MemberRepository;
@@ -24,6 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class MemberServiceImpl implements MemberService {
+
+    @PersistenceContext
+    EntityManager em;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -69,5 +75,16 @@ public class MemberServiceImpl implements MemberService {
 
     private boolean emailExist(String email) {
         return memberRepository.findByEmail(email).isPresent();
+    }
+
+    @Transactional
+    @Override
+    public Member updateLastLoginSuccessDate(String email) {
+        Member member = memberRepository.findByEmail(email).get();
+
+        member.setLastAccessDate(new Date());
+        em.persist(member);
+
+        return member;
     }
 }

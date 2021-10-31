@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jsw.app.service.MemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,15 @@ public class MemberAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private ObjectMapper mapper;
+
+    @Autowired
+    private MemberService memberService;
     
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        // Update Last Login Date after Login Success
+        memberService.updateLastLoginSuccessDate(authentication.getName());
+
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("success", true);
         resultMap.put("member", authentication.getDetails());
