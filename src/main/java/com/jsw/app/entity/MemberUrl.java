@@ -1,14 +1,14 @@
 package com.jsw.app.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,38 +20,36 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="URL")
+@Table(name="MEMBER_URL")
 @SequenceGenerator (
-    name = "URL_ID_GENERATOR",
-    sequenceName = "URL_SEQ",
+    name = "MEMBER_URL_ID_GENERATOR",
+    sequenceName = "MEMBER_URL_SEQ",
     initialValue = 1,
     allocationSize = 1 // default가 50임. 사용할때 조심!!!
 )
-public class Url {
-    
-    public Url () {}
-    
-    public Url (String url, String encodeId, Date createdDate) {
+public class MemberUrl {
+
+    public MemberUrl () {}
+
+    public MemberUrl (Member member, Url url, Date createdDate) {
+        this.member = member;
         this.url = url;
-        this.encodeId = encodeId;
         this.createdDate = createdDate;
     }
     
     @Id
     @Column(name="ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "URL_ID_GENERATOR" )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_URL_ID_GENERATOR" )
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name="MEMBER_ID", nullable = false)
+    private Member member;
     
-    @Column(name="URL", nullable=false, length=4000)
-    private String url;
-    
-    @Column(name="ENC_ID", nullable=false, length=4000)
-    private String encodeId;
+    @ManyToOne
+    @JoinColumn(name="URL_ID", nullable = false)
+    private Url url;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-
-    @OneToMany(mappedBy = "url")
-    List<MemberUrl> memberUrls;
-
 }

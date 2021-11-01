@@ -3,10 +3,14 @@ package com.jsw.app.service;
 import java.util.Date;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+//import javax.persistence.EntityManager;
+//import javax.persistence.PersistenceContext;
 
+import com.jsw.app.entity.Member;
+import com.jsw.app.entity.MemberUrl;
 import com.jsw.app.entity.Url;
+import com.jsw.app.repository.MemberRepository;
+import com.jsw.app.repository.MemberUrlRepository;
 import com.jsw.app.repository.UrlRepository;
 import com.jsw.app.util.Base10Util;
 import com.jsw.app.util.facade.MemberAuthenticationFacade;
@@ -25,11 +29,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ShrotServiceImpl implements ShortService {
     
-    @PersistenceContext
-    EntityManager em;
+    //@PersistenceContext
+    //EntityManager em;
     
     @Autowired
     private UrlRepository urlRepo;
+
+    @Autowired
+    private MemberRepository memberRepo;
+
+    @Autowired
+    private MemberUrlRepository memberUrlRepo;
     
     @Autowired
     private Base10Util encodeUtil;
@@ -47,37 +57,27 @@ public class ShrotServiceImpl implements ShortService {
      *  @return String Id를 Encoding한 값
      */
     @Transactional
-    public String encodeUrl (String url) throws IllegalArgumentException {
+    public String encodeUrl (String urlStr) throws IllegalArgumentException {
         // Url Valid Check
-        if (!urlValidator.isValid(url)) {
+        if (!urlValidator.isValid(urlStr)) {
             log.error("Input Invalid URL");
             throw new IllegalArgumentException("Invalid URL");
         }
 
-        // Member Login Check
-        Authentication authentication = authenticationFacade.getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            log.info("Member Login : {}", authentication.getName());
-        }
-
-        Url urlByUrl = urlRepo.findByUrl(url);
+        Url url = urlRepo.findByUrl(urlStr);
         
-        if (urlByUrl == null) {
-            int newId = Optional.ofNullable(urlRepo.getNextUrlId()).orElseGet(() -> 0) + 1;
-            
+        if (url == null) {
+            int newId = Optional.ofNullable(urlRepo.getNextUrlId()).orElseGet(() -> 0) + 1;          
             String encodeId = encodeUtil.fromBase10(newId);
-            
-            log.info("Insert Id: {}, Url:{}, encodeId:{}", newId, url, encodeId);
-            Url urlEntity = new Url(url, encodeId, new Date());
-            
-            em.persist(urlEntity);
-            
-            return encodeId;
+            url = new Url(urlStr, encodeId, new Date());
+            urlRepo.save(url);
         }
+        // When member login, insert MemberUrl Table 
+        insertMemberUrl(url);
 
-        log.info("Already Exists, Id: {}, Url:{}, encodeId:{}", urlByUrl.getId(), urlByUrl.getUrl(), urlByUrl.getEncodeId());
+        log.info("Get Url, Id: {}, Url:{}, encodeId:{}", url.getId(), url.getUrl(), url.getEncodeId());
         
-        return urlByUrl.getEncodeId();
+        return url.getEncodeId();
     }
     
     /**      
@@ -97,6 +97,22 @@ public class ShrotServiceImpl implements ShortService {
         log.info("Exists Url For Redirect, Id:{}, Url:{}, encodeId:{}", url.getId(), url.getUrl(), url.getEncodeId());
         
         return url.getUrl();
+    }
+
+    private void insertMemberUrl (Url url) {
+        // Member Login Check
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            log.info("Not Login Status");
+            return;
+        }
+        
+        Optional<Member> memberWrapper = memberRepo.findByEmail(authentication.getName());
+        
+        if (memberWrapper.isPresent()) {
+            MemberUrl memberUrl = new MemberUrl(memberWrapper.get(), url, new Date());
+            memberUrlRepo.save(memberUrl);
+        }
     }
 
 }
