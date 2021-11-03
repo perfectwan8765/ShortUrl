@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,6 +54,7 @@ public class Url {
     private Date createdDate;
 
     @OneToMany(mappedBy = "url")
+    @JsonIgnore
     List<MemberUrl> memberUrls;
 
 }

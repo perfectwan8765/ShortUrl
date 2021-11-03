@@ -3,6 +3,23 @@ $(function(){
     const fadeOutTime = 2700;
 
     /**
+     * String Json Type Check
+     * @param {string} str 복사 원하는 Text
+     */
+    const isJson = function (str) {
+        if (typeof str != 'string') {
+            return false;
+        }
+
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Text Copy Clipboard
      * @param {string} text 복사 원하는 Text
      */
@@ -25,6 +42,31 @@ $(function(){
         $(`#${divName}`).prepend(alertElement);
         alertElement.fadeOut(fadeOutTime, 'linear');
     };
+
+    if (isJson(sessionStorage.getItem('urlList'))) {
+        const urlList = JSON.parse(sessionStorage.getItem('urlList'));
+        const memberUrlElement = $('#urlMemberList tbody');
+
+        $.each(urlList, function(idx, url) {
+            let trElement = $('<tr></tr>');
+            let urlStr = url['url'];
+
+            if (urlStr.length > 20) {
+                urlStr = urlStr.substring(0, 20) + '...';
+            }
+
+            let urlDate = $.format.date(url['createdDate'], "yyyy-MM-dd hh:mm:ss");
+
+            trElement.append(`<th scope="row">${idx+1}</th>`);
+            trElement.append(`<td>${urlStr}</td>`);
+            trElement.append(`<td>${url.encodeId}</td>`);
+            trElement.append(`<td>${urlDate}</td>`);
+
+            memberUrlElement.append(trElement);
+        });
+
+        sessionStorage.removeItem('urlList');
+    }
     
 
     /* Particles.js setting (background image) */
@@ -51,7 +93,7 @@ $(function(){
                 "password" : passwordElement.val(),
             },
             success: function(xhr, textStatus, errorThrown) {
-                // Welcome div로 변경
+                sessionStorage.setItem('urlList', JSON.stringify(xhr['urlList']));
                 location.reload();
             },
             error: function(result) {

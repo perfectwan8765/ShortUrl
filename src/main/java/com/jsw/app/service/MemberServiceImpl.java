@@ -5,12 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.jsw.app.entity.Member;
+import com.jsw.app.entity.Url;
 import com.jsw.app.exception.UserAlreadyExistException;
 import com.jsw.app.repository.MemberRepository;
+import com.jsw.app.repository.UrlRepository;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +27,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberServiceImpl implements MemberService {
 
-    @PersistenceContext
-    EntityManager em;
+    //@PersistenceContext
+    //EntityManager em;
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private UrlRepository urlRepository;
+
+    //@Autowired
+    //private JPAQueryFactory jpaQueryFactory;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -83,8 +88,21 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByEmail(email).get();
 
         member.setLastAccessDate(new Date());
-        em.persist(member);
+        memberRepository.save(member);
 
         return member;
     }
+
+    @Transactional
+    @Override
+    public List<Url> getMemberUrlList(String email) {
+        Member member = memberRepository.findByEmail(email).get();
+
+        List<Url> urlList = urlRepository.findMemberUrl(member.getId());
+
+        log.info("Url({}) : {}", urlList.size(), urlList);
+
+        return urlList;
+    }
+
 }
