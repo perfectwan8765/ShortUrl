@@ -1,9 +1,9 @@
 package com.jsw.app.repository;
 
-import java.util.List;
-
 import com.jsw.app.entity.Url;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +17,9 @@ public interface UrlRepository extends JpaRepository<Url, Integer> {
     
     Url findByEncodeId(String encodeId);
 
-    @Query(value = "SELECT * FROM Url u WHERE EXISTS (SELECT 1 FROM Member_Url mu WHERE mu.url_id = u.id AND mu.member_id = :memberId)", nativeQuery = true)
-    List<Url> findMemberUrl(@Param("memberId") Integer memberId);
+    @Query(value = "SELECT * FROM Url u WHERE EXISTS (SELECT 1 FROM Member_Url mu WHERE mu.url_id = u.id AND mu.member_id = :memberId)",
+        countQuery = "SELECT count(1) FROM Url u WHERE EXISTS (SELECT 1 FROM Member_Url mu WHERE mu.url_id = u.id AND mu.member_id = :memberId)",
+        nativeQuery = true)
+    Page<Url> findMemberUrl(@Param("memberId") Integer memberId, Pageable pageable);
 
 }

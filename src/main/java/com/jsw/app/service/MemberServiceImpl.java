@@ -10,9 +10,14 @@ import com.jsw.app.entity.Url;
 import com.jsw.app.exception.UserAlreadyExistException;
 import com.jsw.app.repository.MemberRepository;
 import com.jsw.app.repository.UrlRepository;
+import com.jsw.app.util.facade.MemberAuthenticationFacade;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class MemberServiceImpl implements MemberService {
-
     //@PersistenceContext
     //EntityManager em;
 
@@ -44,6 +48,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private EmailValidator emailValidator;
+
+    @Autowired
+    private MemberAuthenticationFacade authenticationFacade;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -95,12 +102,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public List<Url> getMemberUrlList(String email) {
-        Member member = memberRepository.findByEmail(email).get();
+    public Page<Url> getMemberUrlList(int page, int size) {
+        // Member Login Check
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            log.info("Not Login Status");
+            return null;
+        }
 
-        List<Url> urlList = urlRepository.findMemberUrl(member.getId());
+        log.info("page:{}, size:{}", page, size);
 
-        log.info("Url({}) : {}", urlList.size(), urlList);
+        Member member = memberRepository.findByEmail(authentication.getName()).get();
+        Page<Url> urlList = urlRepository.findMemberUrl(member.getId(), PageRequest.of(page, size));
+
+        log.info("Url of {} / SIZE: {}", member.getEmail(), urlList.getNumberOfElements());
 
         return urlList;
     }

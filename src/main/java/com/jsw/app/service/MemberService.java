@@ -1,11 +1,10 @@
 package com.jsw.app.service;
 
-import java.util.List;
-
 import com.jsw.app.entity.Member;
 import com.jsw.app.entity.Url;
 import com.jsw.app.exception.UserAlreadyExistException;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface MemberService extends UserDetailsService {
@@ -14,5 +13,5 @@ public interface MemberService extends UserDetailsService {
 
     Member updateLastLoginSuccessDate(String email);
 
-    List<Url> getMemberUrlList(String email);
+    Page<Url> getMemberUrlList(int page, int size);
 }

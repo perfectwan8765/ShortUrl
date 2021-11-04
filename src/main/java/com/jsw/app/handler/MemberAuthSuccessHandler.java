@@ -29,14 +29,11 @@ public class MemberAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         // Update Last Login Date after Login Success
-        String email = authentication.getName();
-        memberService.updateLastLoginSuccessDate(email);
+        memberService.updateLastLoginSuccessDate(authentication.getName());
 
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put("success", true);
         resultMap.put("member", authentication.getDetails());
-        // Get Url of Member List
-        resultMap.put("urlList", memberService.getMemberUrlList(email));
 
         response.setStatus(HttpStatus.OK.value()); // 200
         response.setContentType("applicatoin/json;charset=utf-8");

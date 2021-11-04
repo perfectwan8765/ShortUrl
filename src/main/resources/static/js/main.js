@@ -43,29 +43,27 @@ $(function(){
         alertElement.fadeOut(fadeOutTime, 'linear');
     };
 
-    if (isJson(sessionStorage.getItem('urlList'))) {
-        const urlList = JSON.parse(sessionStorage.getItem('urlList'));
-        const memberUrlElement = $('#urlMemberList tbody');
-
-        $.each(urlList, function(idx, url) {
-            let trElement = $('<tr></tr>');
-            let urlStr = url['url'];
-
-            if (urlStr.length > 20) {
-                urlStr = urlStr.substring(0, 20) + '...';
+    /**
+     * get UrlList of Member
+     * @param {Number} page Page Number
+     * @param {Number} size Page Size
+     */
+    const getMemberUrlList = function (page = 0, size = 5) {
+        $.ajax({
+            type: "GET",
+            url: '/member/url',
+            data: {
+                "page" : page,
+                "size" : size,
             }
-
-            let urlDate = $.format.date(url['createdDate'], "yyyy-MM-dd hh:mm:ss");
-
-            trElement.append(`<th scope="row">${idx+1}</th>`);
-            trElement.append(`<td>${urlStr}</td>`);
-            trElement.append(`<td>${url.encodeId}</td>`);
-            trElement.append(`<td>${urlDate}</td>`);
-
-            memberUrlElement.append(trElement);
+        }).done(function (fragment) {
+            $('#urlMemberList').replaceWith(fragment);
         });
+    };
 
-        sessionStorage.removeItem('urlList');
+    if (sessionStorage.getItem('isFirstLogin') == 'Y') {
+        getMemberUrlList();
+        sessionStorage.removeItem('isFirstLogin');
     }
     
 
@@ -87,14 +85,15 @@ $(function(){
 
         $.ajax({
             type: "POST",
-            url: href + 'member/login',
+            url: '/member/login',
             data: {
                 "email" : emailElement.val(),
                 "password" : passwordElement.val(),
             },
             success: function(xhr, textStatus, errorThrown) {
-                sessionStorage.setItem('urlList', JSON.stringify(xhr['urlList']));
                 location.reload();
+
+                sessionStorage.setItem('isFirstLogin', 'Y');
             },
             error: function(result) {
                 showAlert('loginAlertDiv', result.responseJSON['message'], false);
@@ -116,7 +115,7 @@ $(function(){
 
         $.ajax({
             type: "POST",
-            url: href + 'member/new',
+            url: '/member/new',
             data: {
                 "email" : emailElement.val(),
                 "password" : passwordElement.val(),
@@ -142,7 +141,7 @@ $(function(){
 
         $.ajax({
             type: "POST",
-            url: href + 'member/logout',
+            url: '/member/logout',
             success: function(xhr, textStatus, errorThrown) {
                 location.reload();
             },
@@ -172,20 +171,22 @@ $(function(){
         // urlElement Validate Action
         if (!url) {
             showAlert('alertDiv', 'Please Input Url you want to Short URL.', true);
-            urlElement.val("http://");
+            urlElement.val("");
             return;
         }
 
         // Already Display Short URL
-        if (ulElement.children([`data-url=${url}`]).length > 0) {
-            showAlert('alertDiv', 'Already you find this URL.', true);
-            urlElement.val("http://");
-            return;
-        }
-        
+        ulElement.children().each(function(){
+            if ($(this).data('url') == url) {
+                showAlert('alertDiv', 'Already you find this URL.', true);
+                urlElement.val("");
+                return;
+            }
+        });
+
         $.ajax({
             type: "POST",
-            url: href + 'short',
+            url: '/short',
             data: {
                 "url" : url
             },
@@ -218,7 +219,7 @@ $(function(){
             }
         }).always(function(){ // success, error
             // URL input value init
-            urlElement.val("http://");
+            urlElement.val("");
         });
     });
     
