@@ -1,65 +1,64 @@
-$(function(){
-    const href = $(location).attr('href'); // default : http://localhost:8080/
-    const fadeOutTime = 2700;
-
-    /**
-     * String Json Type Check
-     * @param {string} str 복사 원하는 Text
-     */
-    const isJson = function (str) {
-        if (typeof str != 'string') {
-            return false;
-        }
-
-        try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
-        }
-        return true;
+/**
+ * String Json Type Check
+ * @param {string} str 복사 원하는 Text
+ */
+function isJson (str) {
+    if (typeof str != 'string') {
+        return false;
     }
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
 
-    /**
-     * Text Copy Clipboard
-     * @param {string} text 복사 원하는 Text
-     */
-    const copyToClipboard = function (text) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val(text).select();
-        document.execCommand("copy");
-        $temp.remove();
-    };
+/**
+ * Text Copy Clipboard
+ * @param {string} text 복사 원하는 Text
+ */
+function copyToClipboard (text) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(text).select();
+    document.execCommand("copy");
+    $temp.remove();
+};
 
-    /**
-     * Add Div for Alert
-     * @param {string}  divName   div for alert show 
-     * @param {string}  msgText   message text
-     * @param {boolean} isWarning true -> warning, false -> danger
-     */
-    const showAlert = function (divName, msgText, isWarning) {
-        const alertElement = $(`<div class='alert alert-${isWarning ? 'warning' : 'danger'} text-center' role='alert'>${msgText}</div>`);
-        $(`#${divName}`).prepend(alertElement);
-        alertElement.fadeOut(fadeOutTime, 'linear');
-    };
+/**
+ * Add Div for Alert
+ * @param {string}  divName   div for alert show 
+ * @param {string}  msgText   message text
+ * @param {boolean} isWarning true -> warning, false -> danger
+ */
+function showAlert (divName, msgText, isWarning) {
+    const alertElement = $(`<div class='alert alert-${isWarning ? 'warning' : 'danger'} text-center' role='alert'>${msgText}</div>`);
+    $(`#${divName}`).prepend(alertElement);
+    alertElement.fadeOut(fadeOutTime, 'linear');
+};
 
-    /**
-     * get UrlList of Member
-     * @param {Number} page Page Number
-     * @param {Number} size Page Size
-     */
-    const getMemberUrlList = function (page = 0, size = 5) {
-        $.ajax({
-            type: "GET",
-            url: '/member/url',
-            data: {
-                "page" : page,
-                "size" : size,
-            }
-        }).done(function (fragment) {
-            $('#urlMemberList').replaceWith(fragment);
-        });
-    };
+/**
+ * get UrlList of Member
+ * @param {Number} page Page Number
+ * @param {Number} size Page Size
+ */
+ function getMemberUrlList (page = 1, size = 5) {
+    $.ajax({
+        type: "GET",
+        url: '/member/url',
+        data: {
+            "page" : page,
+            "size" : size,
+        }
+    }).done(function (fragment) {
+        $('#urlMemberList').replaceWith(fragment);
+    });
+};
+
+$(document).ready(function() {
+    //const href = $(location).attr('href'); // default : http://localhost:8080/
+    const fadeOutTime = 2700;
 
     if (sessionStorage.getItem('isFirstLogin') == 'Y') {
         getMemberUrlList();
@@ -78,7 +77,7 @@ $(function(){
     /**
      * Login Button Click Event
      */
-     $("#loginBtn").click(function(event){
+    $("#loginBtn").click(function(event){
         event.preventDefault();
         const emailElement = $('#sidebar-wrapper input[name="email"]');
         const passwordElement = $('#sidebar-wrapper input[name="password"]');
@@ -108,7 +107,7 @@ $(function(){
     /**
      * Add Member Button Click Event
      */
-     $("#registerBtn").click(function(event){
+    $("#registerBtn").click(function(event){
         event.preventDefault();
         const emailElement = $('#sidebar-wrapper input[name="email"]');
         const passwordElement = $('#sidebar-wrapper input[name="password"]');
@@ -136,7 +135,7 @@ $(function(){
     /**
      * Add Member Button Click Event
      */
-     $("#logoutBtn").click(function(event){
+    $("#logoutBtn").click(function(event){
         event.preventDefault();
 
         $.ajax({

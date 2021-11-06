@@ -59,6 +59,10 @@ h2 {
   font-size: 22px;
 }
 
+a {
+  cursor: pointer;
+}
+
 #sidebar-wrapper {
   width: 30%;
   min-height: 100vh;

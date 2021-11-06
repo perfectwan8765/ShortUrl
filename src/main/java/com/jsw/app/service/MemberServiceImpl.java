@@ -16,6 +16,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -113,7 +114,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("page:{}, size:{}", page, size);
 
         Member member = memberRepository.findByEmail(authentication.getName()).get();
-        Page<Url> urlList = urlRepository.findMemberUrl(member.getId(), PageRequest.of(page, size));
+        Page<Url> urlList = urlRepository.findMemberUrl(member.getId(), PageRequest.of(page, size, Sort.by("id")));
 
         log.info("Url of {} / SIZE: {}", member.getEmail(), urlList.getNumberOfElements());
 

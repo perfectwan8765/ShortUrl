@@ -70,7 +70,7 @@ public class HomeController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
 
-        Page<Url> urlList = memberService.getMemberUrlList(currentPage, pageSize);
+        Page<Url> urlList = memberService.getMemberUrlList(currentPage-1, pageSize);
         model.addAttribute("urlList", urlList.getContent());
 
         int totalPages = urlList.getTotalPages();
