@@ -2,6 +2,8 @@
 > 긴 Url을 짧게 단축시켜 사용자에게 편의성을 제공해주는 Web Application.  
 > 사용자별로 단축시킨 Url History를 관리하여 제공합니다.
 
+![Short Url Screenshot](/ShortUrl.png)
+
 ## Tech Stack
 ![Java](https://img.shields.io/badge/Java-e51f24.svg?&style=for-the-badge&logo=Java&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F.svg?&style=for-the-badge&logo=SpringBoot&logoColor=white)
