@@ -198,12 +198,13 @@ $(document).ready(function() {
                 }
 
                 // ADD Tag for show short URL
-                const encodeUrl = `${href}redirect/${result}`;
+                const href = $(location).attr('href');
+                const encodeUrl = `/redirect/${result}`;
                 const liElement = $(`<li class='list-group-item list-group-item-success' data-url=${url}>${url}</li>`);
                 
                 const linkBtnElement = $("<div></div>");
                 // Url Link Tag Add
-                linkBtnElement.append(`<a target="_blank" href=${encodeUrl}>${encodeUrl}</a>`);
+                linkBtnElement.append(`<a target="_blank" href=${encodeUrl}>${href}${encodeUrl.substring(1)}</a>`);
                 // Url Text Copy Button Add
                 const copyBtnElement = $("<button type='button' class='btn btn-outline-primary'>COPY</button>");
                 copyBtnElement.click(copyToClipboard(encodeUrl));
