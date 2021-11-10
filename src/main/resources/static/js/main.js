@@ -43,7 +43,7 @@ function showAlert (divName, msgText, isWarning) {
  * @param {Number} page Page Number
  * @param {Number} size Page Size
  */
- function getMemberUrlList (page = 1, size = 5) {
+function getMemberUrlList (page = 1, size = 5) {
     $.ajax({
         type: "GET",
         url: '/member/url',
@@ -64,7 +64,6 @@ $(document).ready(function() {
         getMemberUrlList();
         sessionStorage.removeItem('isFirstLogin');
     }
-    
 
     /* Particles.js setting (background image) */
     Particles.init({
@@ -90,8 +89,7 @@ $(document).ready(function() {
                 "password" : passwordElement.val(),
             },
             success: function(xhr, textStatus, errorThrown) {
-                location.reload();
-
+                location.reload(); // 새로고침
                 sessionStorage.setItem('isFirstLogin', 'Y');
             },
             error: function(result) {

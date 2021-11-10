@@ -35,7 +35,7 @@
         <div id="urlMemberList" sec:authorize="isAuthenticated()">
           <table class="table table-sm table-hover">
             <thead class="thead-light">
-              <tr>
+              <tr class="text-center">
                 <th scope="col">#</th>
                 <th scope="col">Url</th>
                 <th scope="col">Link</th>
@@ -44,14 +44,14 @@
             </thead>
             <tbody>
               <tr th:each="url, iStat : ${urlList}">
-                <th scope="row" th:text="${iStat.count}"></th>
+                <td class="text-center" scope="row" th:with="idx=${iStat.count} + (${currentPageNum.pageNumber}*5)" th:text="${idx}"></td>
                 <td th:title="${url.url}" th:text="${#strings.substring(url.url,0,20)}"></td>
-                <td>
+                <td class="text-center">
                   <a class="link-primary" th:href="@{/redirect/{encodeId}(encodeId=${url.encodeId})}" th:target="_blank">
                     <i class="bi bi-link-45deg"></i>
                   </a>
                 </td>
-                <td th:text="${#dates.format(url.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td class="text-center" th:text="${#dates.format(url.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
               </tr>
             </tbody>
           </table>

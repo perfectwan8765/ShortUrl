@@ -57,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .successHandler(authenticationSuccessHandler)
             .failureHandler(authenticationFailureHandler)
             .and()
-            .authenticationProvider(authenticationProvider);
+            .authenticationProvider(authenticationProvider)
+            .sessionManagement().maximumSessions(2);
 
         // Logout
         http.logout()
