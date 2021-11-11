@@ -19,3 +19,7 @@ spring:
     enabled: true
     prefix: classpath:/templates/
     suffix: .html
+server:
+  servlet:
+    session:
+      timeout: 30m

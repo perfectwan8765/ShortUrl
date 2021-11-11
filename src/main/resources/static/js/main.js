@@ -44,6 +44,8 @@ function showAlert (divName, msgText, isWarning) {
  * @param {Number} size Page Size
  */
 function getMemberUrlList (page = 1, size = 5) {
+    sessionStorage.setItem('memberPage', page);
+
     $.ajax({
         type: "GET",
         url: '/member/url',
@@ -59,10 +61,10 @@ function getMemberUrlList (page = 1, size = 5) {
 $(document).ready(function() {
     //const href = $(location).attr('href'); // default : http://localhost:8080/
     const fadeOutTime = 2700;
+    const memberPage = Number(sessionStorage.getItem('memberPage'));
 
-    if (sessionStorage.getItem('isFirstLogin') == 'Y') {
-        getMemberUrlList();
-        sessionStorage.removeItem('isFirstLogin');
+    if (!(isNaN(memberPage) || memberPage == 0)) {
+        getMemberUrlList(memberPage);
     }
 
     /* Particles.js setting (background image) */
@@ -90,7 +92,7 @@ $(document).ready(function() {
             },
             success: function(xhr, textStatus, errorThrown) {
                 location.reload(); // 새로고침
-                sessionStorage.setItem('isFirstLogin', 'Y');
+                sessionStorage.setItem('memberPage', '1');
             },
             error: function(result) {
                 showAlert('loginAlertDiv', result.responseJSON['message'], false);
@@ -140,6 +142,7 @@ $(document).ready(function() {
             type: "POST",
             url: '/member/logout',
             success: function(xhr, textStatus, errorThrown) {
+                sessionStorage.removeItem('memberPage');
                 location.reload();
             },
             error: function(result) {

@@ -67,11 +67,17 @@
         </div>
         <!-- login form -->
         <div sec:authorize="isAnonymous()">
-          <div class="form-group mb-2">
-            <input class="form-control" type="email" name="email" placeholder="Email Address">
+          <div class="input-group mb-1">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="bi bi-mailbox2"></i></span>
+            </div>
+            <input class="form-control" type="email" name="email" placeholder="Email Address" autocomplete="off" />
           </div>
-          <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+            </div>
+            <input class="form-control" type="password" name="password" placeholder="Password" />
           </div>
         </div>
         <hr>
