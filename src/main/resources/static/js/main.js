@@ -33,7 +33,9 @@ function copyToClipboard (text) {
  * @param {boolean} isWarning true -> warning, false -> danger
  */
 function showAlert (divName, msgText, isWarning) {
+    const fadeOutTime = 2700;
     const alertElement = $(`<div class='alert alert-${isWarning ? 'warning' : 'danger'} text-center' role='alert'>${msgText}</div>`);
+    
     $(`#${divName}`).prepend(alertElement);
     alertElement.fadeOut(fadeOutTime, 'linear');
 };
@@ -60,7 +62,6 @@ function getMemberUrlList (page = 1, size = 5) {
 
 $(document).ready(function() {
     //const href = $(location).attr('href'); // default : http://localhost:8080/
-    const fadeOutTime = 2700;
     const memberPage = Number(sessionStorage.getItem('memberPage'));
 
     if (!(isNaN(memberPage) || memberPage == 0)) {

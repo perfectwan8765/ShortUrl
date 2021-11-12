@@ -1,6 +1,7 @@
 package com.jsw.app.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 //import javax.persistence.EntityManager;
@@ -107,12 +108,25 @@ public class ShrotServiceImpl implements ShortService {
             return;
         }
         
+        // Check Exists Member
         Optional<Member> memberWrapper = memberRepo.findByEmail(authentication.getName());
-        
-        if (memberWrapper.isPresent()) {
-            MemberUrl memberUrl = new MemberUrl(memberWrapper.get(), url, new Date());
-            memberUrlRepo.save(memberUrl);
+        if (!memberWrapper.isPresent()) {
+            log.error("Member Not Exists");
+            return;
         }
+
+        Member member = memberWrapper.get();
+
+        // Check register Url of Member
+        List<Member> memberList = memberRepo.findByMemberUrls_Id(url.getId());
+        if (memberList.indexOf(member) != -1) {
+            log.info("Already register Url of Member({}): {}", member.getEmail(), url.getUrl());
+            return;
+        }
+
+        // Register Url of Member
+        MemberUrl memberUrl = new MemberUrl(member, url, new Date());
+        memberUrlRepo.save(memberUrl);
     }
 
 }
