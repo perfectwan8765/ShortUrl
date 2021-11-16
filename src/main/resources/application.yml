@@ -5,9 +5,9 @@ spring:
   #    suffix: .jsp
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/shorturl?currentSchema=shorturl
-    username: shorturl
-    password: shorturl
+    url: ENC(DwUn1dByIGMkxfB4oYTgpVrT9ILF2Jim6BYPBh2RWeD6DkpUDf++g7WD+kH2bUfO+cLJ3s+bRDmbthtkvLdTLGTSHx0RUmM0XC25vrLsdjk=)
+    username: ENC(ZOokZrKQZyYQgr+UXqvVOAMKZ9gDQyBI)
+    password: ENC(ZOokZrKQZyYQgr+UXqvVOAMKZ9gDQyBI)
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -23,3 +23,6 @@ server:
   servlet:
     session:
       timeout: 30m
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
