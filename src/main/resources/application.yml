@@ -8,6 +8,10 @@ spring:
     url: ENC(DwUn1dByIGMkxfB4oYTgpVrT9ILF2Jim6BYPBh2RWeD6DkpUDf++g7WD+kH2bUfO+cLJ3s+bRDmbthtkvLdTLGTSHx0RUmM0XC25vrLsdjk=)
     username: ENC(ZOokZrKQZyYQgr+UXqvVOAMKZ9gDQyBI)
     password: ENC(ZOokZrKQZyYQgr+UXqvVOAMKZ9gDQyBI)
+    hikari:
+      connectionTimeout: 30000 # default: 30000(30sec)
+      maximumPoolSize: 30 # default: 10
+      maxLifeTime: 1800000 # default: 1800000(30minute)
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
